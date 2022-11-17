@@ -13,6 +13,35 @@ public struct EquatorialCoordinates{
     
     public var rightAscension: Angle  //alfa
     public var declination: Angle     //delta
+    public var hourAngle: Angle?
+    public var lstDecimal: Double?
+    
+    init(declination: Angle,rightAscension: Angle){
+        self.declination = declination
+        self.rightAscension = rightAscension
+    }
+    
+    init(rightAscension: Angle, declination: Angle,lstDecimal: Double) {
+        self.rightAscension = rightAscension
+        self.declination = declination
+        self.lstDecimal = lstDecimal
+        var hourAngleDecimal = lstDecimal - rightAscension.degrees
+        if hourAngleDecimal < 0 {
+            hourAngleDecimal += 24
+        }
+        self.hourAngle = .init(degrees: hourAngleDecimal * 15)
+    }
+    
+    init(declination: Angle,hourAngle: Angle,lstDecimal: Double){
+            
+        self.declination = declination
+        self.hourAngle = hourAngle
+        self.lstDecimal = lstDecimal
+        self.rightAscension = .init(degrees: lstDecimal - hourAngle.degrees) 
+        
+    }
+    
+    
     
     /// Converts Equatorial coordinates to Horizon coordinates.
     ///
@@ -24,17 +53,19 @@ public struct EquatorialCoordinates{
     ///   - longitude: Longitude of the observer
     ///
     /// - Returns: Horizon coordinates for the given latitude and longitude..
-    public func equatorial2Horizon(lstDecimal: Double,latitude: Angle,longitude: Angle) -> HorizonCoordinates{
-        var hourAngleDecimal = lstDecimal - rightAscension.degrees
+    public mutating func equatorial2Horizon(lstDecimal: Double,latitude: Angle,longitude: Angle) -> HorizonCoordinates{
         
+        self.lstDecimal = lstDecimal
+        
+        var hourAngleDecimal = lstDecimal - rightAscension.degrees
         if hourAngleDecimal < 0 {
             hourAngleDecimal += 24
         }
-        //Step2:
-        let hourAngle: Angle = .init(degrees: hourAngleDecimal * 15)
-
+        self.hourAngle = .init(degrees: hourAngleDecimal * 15)
+        
+       
         //Step4:
-        let tZeroEquatorialToHorizon = sin(declination.radians) * sin(latitude.radians) + cos(declination.radians) * cos(latitude.radians) * cos(hourAngle.radians)
+        let tZeroEquatorialToHorizon = sin(declination.radians) * sin(latitude.radians) + cos(declination.radians) * cos(latitude.radians) * cos(hourAngle!.radians)
 
         //Step5:
         let altitude: Angle = .init(radians: asin(tZeroEquatorialToHorizon))
@@ -47,11 +78,13 @@ public struct EquatorialCoordinates{
 
         //Step8
         var azimuth: Angle = .init(radians: acos(tTwoEquatorialToHorizon))
-        if sin(hourAngle.radians) >= 0{
+        if sin(hourAngle!.radians) >= 0{
             azimuth.degrees = 360 - azimuth.degrees
         }
         
         return .init(altitude: altitude, azimuth: azimuth)
     }
+    
+    
     
 }

@@ -51,7 +51,7 @@ public struct EclipticCoordinates {
         let alfa: Angle  = .init(degrees: r.degrees / 15)
         let delta: Angle = .init(degrees: moonDeclination.degrees)
         
-        return .init(rightAscension: alfa, declination: delta)
-        
+        return .init(declination: delta, rightAscension: alfa)
+            
     }
 }

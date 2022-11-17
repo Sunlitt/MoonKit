@@ -9,7 +9,7 @@ import Foundation
 
 
 /// Time expressed in HMS format
-public struct HMS{
+public struct HMS: Equatable{
     
     public var hours: Double
     public var minutes: Double
@@ -32,6 +32,27 @@ public struct HMS{
         self.seconds = seconds
     }
     
+    public init(decimal: Double){
+        
+        //Step1:
+        let sign = decimal < 0 ? -1 : 1
+        //Step2:
+        let dec = abs(decimal)
+        //Step3:
+        var hours = Int(dec)
+        //Step4:
+        let minutes = Int(60 * dec.truncatingRemainder(dividingBy: 1))
+        //Step5:
+        let seconds = 60 * (60 * dec.truncatingRemainder(dividingBy: 1)).truncatingRemainder(dividingBy: 1)
+        //Step6:
+        hours *= sign
+
+        self.hours = Double(hours)
+        self.minutes = Double(minutes)
+        self.seconds = seconds
+    
+    }
+    
     /// It converts from HMS format to decimal
     /// - Returns: HMS of the instance expressed in decimal format
     public func hMS2Decimal() -> Double {
@@ -47,4 +68,5 @@ public struct HMS{
         
         return decimalHour
     }
+    
 }

@@ -78,7 +78,7 @@ public class Moon {
         Int(timeZone * 3600)
     }
     private var moonHorizonCoordinates: HorizonCoordinates = .init(altitude: .zero, azimuth: .zero)
-    private var moonEquatorialCoordinates: EquatorialCoordinates = .init(rightAscension: .zero, declination: .zero)
+    private var moonEquatorialCoordinates: EquatorialCoordinates = .init(declination: .zero, rightAscension: .zero)
     private var moonEclipticCoordinates: EclipticCoordinates = .init(eclipticLatitude: .zero, eclipticLongitude: .zero)
     
     //Moon constants
@@ -190,7 +190,7 @@ public class Moon {
         //Step4:
         //Compute the Julian day number for the desired date using the Greenwich date and TT
         
-        ttHMS = decimal2HMS(ttDecimal)
+        ttHMS = HMS.init(decimal: ttDecimal)
         
         let utDay = calendar.component(.day, from: utDate)
         let utMonth = calendar.component(.month, from: utDate)
@@ -340,7 +340,7 @@ public class Moon {
         //Step4:
         //Compute the Julian day number for the desired date using the Greenwich date and TT
         
-        ttHMS = decimal2HMS(ttDecimal)
+        ttHMS = HMS.init(decimal: ttDecimal) 
         
         let utDay = calendar.component(.day, from: utDate)
         let utMonth = calendar.component(.month, from: utDate)
@@ -452,7 +452,7 @@ public class Moon {
         let moonEclipticCoordinates: EclipticCoordinates = .init(eclipticLatitude: betaM, eclipticLongitude: lambdaM)
         
         //Step28: Ecliptic to Equatorial
-        let moonEquatorialCoordinates: EquatorialCoordinates = moonEclipticCoordinates.ecliptic2Equatorial()
+        var moonEquatorialCoordinates: EquatorialCoordinates = moonEclipticCoordinates.ecliptic2Equatorial()
         
         //Step29: Equatorial to Horizon
         var moonHorizonCoordinates: HorizonCoordinates = moonEquatorialCoordinates.equatorial2Horizon(lstDecimal: lstDecimal,latitude: latitude,longitude: longitude)

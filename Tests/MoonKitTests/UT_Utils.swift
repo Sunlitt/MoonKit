@@ -13,40 +13,6 @@ import SwiftUI
 final class UT_Utils: XCTestCase {
 
    
-    /// Test of dMS2Decimal
-    /// Test 1 for decimal equals 10.2958 the DMS value should be equals to 10° 17' 44.88''
-    /// Test 2 for decimal equals 0.508333  the DMS value should be equals to −0°30′30′′
-    func testOfdecimal2DMS() throws {
-        
-      //Test1:
-        //Step1: Set decimal value equals 10.2958
-        var decimal = 10.2958
-        //Step2: Call function under test
-        var dms = decimal2DMS(decimal)
-        //Step3: Check if the the values set is inside the correct range
-        XCTAssertTrue((dms.degrees == 10) && (dms.minutes == 17) && (44.87...44.88).contains(dms.seconds))
-      //Test2:
-        //Step4: Set decimal value equals 10.2958
-        decimal = 0.508333
-        //Step5: Call function under test
-        dms = decimal2DMS(decimal)
-        //Step6: Check if the the values set is inside the correct range and if isANegativeZero equals true
-        XCTAssertTrue((dms.degrees == 0) && (dms.minutes == 30) && (round(dms.seconds) == 30) && dms.isANegativeZero)
-        
-    }
-    
-    /// Test of dMS2Decimal
-    /// For decimal equals 20.352 the DMS value should be equals to 20h 21m 7.2s
-    func testOfdecimal2HMS() throws {
-        
-      //Test1:
-        //Step1: Set decimal value equals 20.352
-        let decimal = 20.352
-        //Step2: Call function under test
-        let hms = decimal2HMS(decimal)
-        //Step3: Check if the the values set is inside the correct range
-        XCTAssertTrue((hms.hours == 20) && (hms.minutes == 21) && (7.1...7.3).contains(hms.seconds))
-    }
     
     /// Test of mod
     func testOfmod() throws {
@@ -198,6 +164,4 @@ final class UT_Utils: XCTestCase {
         XCTAssertTrue(abs(expectedOutput.timeIntervalSince1970 - lST2GST(dateUnderTest, longitude: longitudeUnderTest).timeIntervalSince1970) <= 2)
     }
     
-    
-
 }

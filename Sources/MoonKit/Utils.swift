@@ -94,51 +94,6 @@ public func jdFromDate(date : Date) -> Double {
     / 86400
 }
 
-/// It converts a decimal number to HMS rapresentation
-/// - Parameter decimal: Decimal format of the number that will be converted in HMS
-/// - Returns: HMS format of the decimal numer given in input
-public func decimal2HMS(_ decimal: Double) -> HMS {
-    
-    //Step1:
-    let sign = decimal < 0 ? -1 : 1
-    //Step2:
-    let dec = abs(decimal)
-    //Step3:
-    var hours = Int(dec)
-    //Step4:
-    let minutes = Int(60 * dec.truncatingRemainder(dividingBy: 1))
-    //Step5:
-    let seconds = 60 * (60 * dec.truncatingRemainder(dividingBy: 1)).truncatingRemainder(dividingBy: 1)
-    //Step6:
-    hours *= sign
-
-    return .init(hours: Double(hours), minutes: Double(minutes), seconds: seconds)
-}
-
-/// It converts a decimal number to DMS rapresentation
-/// - Parameter decimal: Decimal format of the number that will be converted in DMS
-/// - Returns: DMS format of the decimal number  given in input
-public func decimal2DMS(_ decimal: Double) -> DMS {
-    
-    //Step1:
-    let sign = decimal < 0 ? -1 : 1
-    //Step2:
-    let dec = abs(decimal)
-    //Step3:
-    var degrees = Int(dec)
-    //Step4:
-    let minutes = Int(60 * dec.truncatingRemainder(dividingBy: 1))
-    //Step5:
-    let seconds = 60 * (60 * dec.truncatingRemainder(dividingBy: 1)).truncatingRemainder(dividingBy: 1)
-    //Step6:
-    degrees *= sign
-    if degrees == 0 {
-        return .init(degrees: Double(degrees), minutes: Double(minutes), seconds: seconds, isANegativeZero: true)
-    }
-    return .init(degrees: Double(degrees), minutes: Double(minutes), seconds: seconds)
-}
-
-
 /// It converts decimal to a date type with timezone used on your current device
 /// - Parameters:
 ///   - decimal: Hour expressed in decimal format
@@ -150,7 +105,7 @@ public func decimal2Date(_ decimal: Double,day: Int,month: Int,year: Int) -> Dat
     
     var calendar: Calendar = .init(identifier: .gregorian)
     calendar.timeZone = .current
-    let hms = decimal2HMS(decimal)
+    let hms = HMS.init(decimal: decimal)
     var dateComponents = DateComponents()
     dateComponents.year = year
     dateComponents.month = month
@@ -190,7 +145,7 @@ public func lCT2UT(_ lct: Date, timeZoneInSeconds: Int) -> Date{
         day = calendar.component(.day,from: lct) + 1
     }
     
-    let lctHMS = decimal2HMS(lctDecimal)
+    let lctHMS = HMS.init(decimal: lctDecimal)
     let year = calendar.component(.year, from: lct)
     var dateComponents = DateComponents()
     dateComponents.year = year
@@ -229,7 +184,7 @@ public func UT2LCT(_ ut: Date,timeZoneInSeconds: Int) -> Date{
         day = calendar.component(.day,from: ut) + 1
     }
     
-    let utHMS = decimal2HMS(utDecimal)
+    let utHMS = HMS.init(decimal: utDecimal)
     let year = calendar.component(.year, from: ut)
     var dateComponents = DateComponents()
     dateComponents.year = year
@@ -297,7 +252,7 @@ public func uT2GST(_ ut:Date) -> Date{
         day = calendar.component(.day,from: ut) + 1
     }
     
-    let gstHMS = decimal2HMS(gstDecimal)
+    let gstHMS = HMS.init(decimal: gstDecimal)
     
     var dateComponents = DateComponents()
     dateComponents.year = year
@@ -367,7 +322,7 @@ public func gST2UT(_ gst:Date) -> Date{
     let utDecimal = 0.997270 * a
     
     //Step13
-    let utHMS = decimal2HMS(utDecimal)
+    let utHMS = HMS.init(decimal: utDecimal)
     let day = calendar.component(.day,from: gst)
     var dateComponents = DateComponents()
     dateComponents.year = year
@@ -413,7 +368,7 @@ public func gST2LST(_ gst: Date, longitude: Angle) -> Date{
         day = calendar.component(.day,from: gst) + 1
     }
     
-    let lstHMS = decimal2HMS(lstDecimal)
+    let lstHMS = HMS.init(decimal: lstDecimal)
     let year = calendar.component(.year, from: gst)
     var dateComponents = DateComponents()
     dateComponents.year = year
@@ -456,7 +411,7 @@ public func lST2GST(_ lst: Date, longitude: Angle) -> Date{
         gstDecimal -= 24
     }
     
-    let gstHMS = decimal2HMS(gstDecimal)
+    let gstHMS = HMS.init(decimal: gstDecimal)
     
     let year = calendar.component(.year, from: lst)
     var dateComponents = DateComponents()

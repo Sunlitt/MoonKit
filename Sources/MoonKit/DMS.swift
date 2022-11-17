@@ -8,12 +8,50 @@
 import Foundation
 
 /// DMS format to express angles
-public struct DMS{
+public struct DMS: Equatable{
     
     public var degrees: Double
     public var minutes: Double
     public var seconds: Double
-    public var isANegativeZero: Bool = false
+    public var isANegativeZero: Bool
+    
+    
+    init(degrees: Double, minutes: Double, seconds: Double, isANegativeZero: Bool = false) {
+        self.degrees = degrees
+        self.minutes = minutes
+        self.seconds = seconds
+        self.isANegativeZero = isANegativeZero
+    }
+    
+    public init(decimal: Double){
+        
+        //Step1:
+        let sign = decimal < 0 ? -1 : 1
+        //Step2:
+        let dec = abs(decimal)
+        //Step3:
+        var degrees = Int(dec)
+        //Step4:
+        let minutes = Int(60 * dec.truncatingRemainder(dividingBy: 1))
+        //Step5:
+        let seconds = 60 * (60 * dec.truncatingRemainder(dividingBy: 1)).truncatingRemainder(dividingBy: 1)
+        //Step6:
+        degrees *= sign
+        if degrees == 0 && sign == -1 {
+            self.degrees = Double(degrees)
+            self.minutes = Double(minutes)
+            self.seconds = seconds
+            self.isANegativeZero = true
+        }
+        else{
+            self.degrees = Double(degrees)
+            self.minutes = Double(minutes)
+            self.seconds = seconds
+            self.isANegativeZero = false
+        }
+       
+        
+    }
     
     /// It converts from DMS format to decimal
     /// - Returns: DMS of the instance expressed in decimal format
@@ -33,6 +71,11 @@ public struct DMS{
         decimal += Double(degrees)
         //Step7:
         decimal *= sign
+        
+        if isANegativeZero{
+            
+            decimal *= -1
+        }
         
         return decimal
     }
