@@ -14,7 +14,7 @@ import SwiftUI
 /// - Parameters:
 ///   - a: first operand
 ///   - n: second operand
-/// - Returns: a % n if a is positive. If a isn't positive, it will add to the result of the modulo operation the value of the n operand
+/// - Returns: a % n if a is positive. If a isn't positive, it will add to the result of the modulo operation the value of the n operand.Please note that this function only works when both operands are integers. 
 public func mod(_ a: Int, _ n: Int) -> Int {
     let r = a % n
     return r >= 0 ? r : r + n
@@ -30,7 +30,7 @@ public func mod(_ a: Int, _ n: Int) -> Int {
 ///   - minute: minute of the date you want to create
 ///   - seconds: second of the date you want to create
 ///   - nanosecond: nanosecond of the date you want to create
-/// - Returns: A date with the parameters given in input
+/// - Returns: A date with the parameters given in input. Used in combination with function jdFromDate, that accepts dates in UTC format
 public func createDateUTC(day: Int,month: Int,year: Int,hour: Int,minute: Int,seconds: Int, nanosecond: Int = 0) -> Date{
     
     var calendarUTC:Calendar = .init(identifier: .gregorian)
@@ -77,7 +77,7 @@ public func createDateCurrentTimeZone(day: Int,month: Int,year: Int,hour: Int,mi
 }
 
 /// Converts  Julian Number in a date
-/// - Parameter jd: Julian number to convert in a date
+/// - Parameter jd: Julian number to convert in an UTC date
 /// - Returns: The date corresponding to the julian number in input
 public func dateFromJd(jd : Double) -> Date {
     let JD_JAN_1_1970_0000GMT = 2440587.5
@@ -86,7 +86,7 @@ public func dateFromJd(jd : Double) -> Date {
 
 
 /// Converts date in his Julian Number
-/// - Parameter date: date to convert in julian number
+/// - Parameter date: UTC date to convert in julian number
 /// - Returns: The julian day number corresponding to date in input
 public func jdFromDate(date : Date) -> Double {
     let JD_JAN_1_1970_0000GMT = 2440587.5
@@ -164,11 +164,11 @@ public func decimal2Date(_ decimal: Double,day: Int,month: Int,year: Int) -> Dat
 }
 
 /// It converts local civil time to UT time.
-/// Timezone will remain the same: set to the one used on your current device.
+/// Converting between LCT and UT is independent of the date because it is merely a matter of making a time zone adjustment.
 ///
 /// - Parameter lct: Local civil time date
 /// - Parameter timeZoneInSeconds: time zone expressed in seconds of your local civil time
-/// - Returns: UT equivalent for the LCT given in input.
+/// - Returns: UT equivalent for the LCT given in input. TimeZone will remain the same:  set to the one used on your current device.
 public func lCT2UT(_ lct: Date, timeZoneInSeconds: Int) -> Date{
     
     var calendar: Calendar = .init(identifier: .gregorian)

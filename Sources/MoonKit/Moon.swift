@@ -19,9 +19,9 @@ public class Moon {
     public private(set) var timeZone: Double
     public private(set) var date: Date = Date()
     
-    ///Date  of moonrise in local timzone, nill if moonrise not found
+    ///Date  of moonrise in local timezone, nill if moonrise not found
     public private(set) var moonRise: Date?
-    ///Date  of moonset in local timzone, nill if moonset not found
+    ///Date  of moonset in local timezone, nill if moonset not found
     public private(set) var moonSet: Date?
     ///Azimuth of moonrise, nill if moonrise not found
     public private(set) var moonriseAzimuth: Double?
