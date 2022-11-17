@@ -56,7 +56,7 @@ public class Moon {
     }
     
     public var currentMoonPhase: MoonPhase {
-        return  MoonPhase.AgeOfTheMoonDegrees2MoonPhase(ageOfTheMoonDegress)
+        return MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonDegress)
     }
     
     ///Number of days since the date selected in which there will be a full moon

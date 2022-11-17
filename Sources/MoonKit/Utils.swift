@@ -86,7 +86,7 @@ public func dateFromJd(jd : Double) -> Date {
 
 
 /// Converts date in his Julian Number
-/// - Parameter date: UTC date to convert in julian number
+/// - Parameter date: UTC date to convert in julian number. TimeZone  of the given date shall be equals to +0000.
 /// - Returns: The julian day number corresponding to date in input
 public func jdFromDate(date : Date) -> Double {
     let JD_JAN_1_1970_0000GMT = 2440587.5
@@ -184,7 +184,7 @@ public func lCT2UT(_ lct: Date, timeZoneInSeconds: Int) -> Date{
         lctDecimal += 24
         day = calendar.component(.day,from: lct) - 1
         
-    }else if lctDecimal > 24 {
+    }else if lctDecimal >= 24 {
         
         lctDecimal -= 24
         day = calendar.component(.day,from: lct) + 1
@@ -204,11 +204,10 @@ public func lCT2UT(_ lct: Date, timeZoneInSeconds: Int) -> Date{
 }
 
 /// It converts UT time to LCT
-/// Timezone will remain the same: set to the one used on your current device.
 ///
 /// - Parameter lct: Local civil time date
 /// - Parameter timeZoneInSeconds: time zone expressed in seconds of your local civil time
-/// - Returns: LCT equivalent for the UT given in input.
+/// - Returns: LCT equivalent for the UT given in input. TimeZone will remain the same:  set to the one used on your current device.
 public func UT2LCT(_ ut: Date,timeZoneInSeconds: Int) -> Date{
     
     var calendar: Calendar = .init(identifier: .gregorian)
@@ -224,7 +223,7 @@ public func UT2LCT(_ ut: Date,timeZoneInSeconds: Int) -> Date{
         utDecimal += 24
         day = calendar.component(.day,from: ut) - 1
         
-    }else if utDecimal > 24 {
+    }else if utDecimal >= 24 {
         
         utDecimal -= 24
         day = calendar.component(.day,from: ut) + 1
@@ -292,7 +291,7 @@ public func uT2GST(_ ut:Date) -> Date{
         gstDecimal += 24
         day = calendar.component(.day,from: ut) - 1
         
-    }else if gstDecimal > 24 {
+    }else if gstDecimal >= 24 {
         
         gstDecimal -= 24
         day = calendar.component(.day,from: ut) + 1
@@ -349,7 +348,7 @@ public func gST2UT(_ gst:Date) -> Date{
     //Step8:
     if TZero < 0 {
         TZero += 24
-    }else if TZero > 24{
+    }else if TZero >= 24{
         TZero -= 24
     }
     //Step9:
@@ -408,7 +407,7 @@ public func gST2LST(_ gst: Date, longitude: Angle) -> Date{
         lstDecimal += 24
         day = calendar.component(.day,from: gst) - 1
         
-    }else if gstDecimal > 24 {
+    }else if gstDecimal >= 24 {
         
         lstDecimal -= 24
         day = calendar.component(.day,from: gst) + 1
@@ -452,7 +451,7 @@ public func lST2GST(_ lst: Date, longitude: Angle) -> Date{
     if gstDecimal < 0 {
         day = day + 1
         gstDecimal += 24
-    } else if gstDecimal > 24{
+    } else if gstDecimal >= 24{
         day = day - 1
         gstDecimal -= 24
     }
