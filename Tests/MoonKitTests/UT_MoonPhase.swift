@@ -15,7 +15,7 @@ final class UT_MoonPhase: XCTestCase {
         
         var ageOfTheMoonInDegreesUnderTest: Double = .zero
         
-        //Test1: New moon phase
+    //Test1: New moon phase
         
         //Step1:
         ageOfTheMoonInDegreesUnderTest = .zero
@@ -34,7 +34,7 @@ final class UT_MoonPhase: XCTestCase {
         //Step8:
         XCTAssertTrue(.newMoon == MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         
-        //Test2: Waxing Crescent phase
+    //Test2: Waxing Crescent phase
         
         //Step1:
         ageOfTheMoonInDegreesUnderTest = 1
@@ -50,7 +50,7 @@ final class UT_MoonPhase: XCTestCase {
         XCTAssertTrue(.waxingCrescent != MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         
         
-        //Test3: First Quarter phase
+    //Test3: First Quarter phase
         
         //Step1:
         ageOfTheMoonInDegreesUnderTest = 90
@@ -65,7 +65,7 @@ final class UT_MoonPhase: XCTestCase {
         //Step6:
         XCTAssertTrue(.firstQuarter != MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         
-        //Test4: Waxing Gibbous phase
+    //Test4: Waxing Gibbous phase
         
         //Step1:
         ageOfTheMoonInDegreesUnderTest = 91
@@ -80,7 +80,7 @@ final class UT_MoonPhase: XCTestCase {
         //Step6:
         XCTAssertTrue(.waxingGibbous != MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         
-        //Test5: Full Moon phase
+    //Test5: Full Moon phase
         
         //Step1:
         ageOfTheMoonInDegreesUnderTest = 190
@@ -95,7 +95,7 @@ final class UT_MoonPhase: XCTestCase {
         //Step6:
         XCTAssertTrue(.fullMoon == MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         
-        //Test6: Waning Gibbous phase
+    //Test6: Waning Gibbous phase
         
         //Step1:
         ageOfTheMoonInDegreesUnderTest = 190
@@ -110,7 +110,7 @@ final class UT_MoonPhase: XCTestCase {
         //Step6:
         XCTAssertTrue(.waningGibbous != MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         
-        //Test7: Last Quarter phase
+    //Test7: Last Quarter phase
         
         //Step1:
         ageOfTheMoonInDegreesUnderTest = 270
@@ -126,7 +126,7 @@ final class UT_MoonPhase: XCTestCase {
         XCTAssertTrue(.lastQuarter != MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         
       
-        //Test7: Waning Crescent phase
+    //Test8: Waning Crescent phase
         
         //Step1:
         ageOfTheMoonInDegreesUnderTest = 359
@@ -141,12 +141,11 @@ final class UT_MoonPhase: XCTestCase {
         //Step6:
         XCTAssertTrue(.waningCrescent != MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         
-        //Test8: Error phase
+    //Test9: Error phase
         
         //Step1:
         ageOfTheMoonInDegreesUnderTest = -5
         //Step2:
         XCTAssertTrue(.error == MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
-            
     }
 }

@@ -78,7 +78,7 @@ public class Moon {
         Int(timeZone * 3600)
     }
     private var moonHorizonCoordinates: HorizonCoordinates = .init(altitude: .zero, azimuth: .zero)
-    private var moonEquatorialCoordinates: EquatorialCoordinates = .init(declination: .zero, rightAscension: .zero)
+    private var moonEquatorialCoordinates: EquatorialCoordinates = .init(declination: .zero)
     private var moonEclipticCoordinates: EclipticCoordinates = .init(eclipticLatitude: .zero, eclipticLongitude: .zero)
     
     //Moon constants
@@ -304,15 +304,7 @@ public class Moon {
         moonEquatorialCoordinates = moonEclipticCoordinates.ecliptic2Equatorial()
         
         //Step29: Equatorial to Horizon
-        moonHorizonCoordinates = moonEquatorialCoordinates.equatorial2Horizon(lstDecimal: lstDecimal,latitude: latitude,longitude: longitude)
-        
-        moonHorizonCoordinates.azimuth.degrees -= 0.3   //magic number
-        
-        moonHorizonCoordinates.altitude.degrees  -= 0.7 //magic number
-        
-        // TO DO: Update also the ecliptic and equatorial
-        
-        
+        moonHorizonCoordinates = moonEquatorialCoordinates.equatorial2Horizon(lstDecimal: lstDecimal,latitude: latitude) ?? .init(altitude: .zero, azimuth: .zero)
     }
     
     
@@ -455,11 +447,7 @@ public class Moon {
         var moonEquatorialCoordinates: EquatorialCoordinates = moonEclipticCoordinates.ecliptic2Equatorial()
         
         //Step29: Equatorial to Horizon
-        var moonHorizonCoordinates: HorizonCoordinates = moonEquatorialCoordinates.equatorial2Horizon(lstDecimal: lstDecimal,latitude: latitude,longitude: longitude)
-        
-        moonHorizonCoordinates.azimuth.degrees -= 0.3   //Magic number
-        
-        moonHorizonCoordinates.altitude.degrees  -= 0.7 //Magic number
+        let moonHorizonCoordinates: HorizonCoordinates = moonEquatorialCoordinates.equatorial2Horizon(lstDecimal: lstDecimal,latitude: latitude) ?? .init(altitude: .zero, azimuth: .zero)
         
         return .init(altitude: moonHorizonCoordinates.altitude, azimuth: moonHorizonCoordinates.azimuth)
         
