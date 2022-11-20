@@ -27,6 +27,7 @@ public class Moon {
     public private(set) var moonriseAzimuth: Double?
     ///Azimuth of moonset, nill if moonset not found
     public private(set) var moonsetAzimuth: Double?
+    
     public private(set) var moonPercentage: Double = 0
     public private(set) var ageOfTheMoonInDays: Double = 0
     
@@ -130,11 +131,9 @@ public class Moon {
     /// Then get rise and set times.
     /// then update the moon percentage and age of the moon in days
     private func refresh(){
-        
         updateMoonCoordinates()
-        getRiseAndSetDates()
         updateMoonPercentage()
-        
+        getRiseAndSetDates()
     }
     
     private func getSunMeanAnomaly(from elapsedDaysSinceStandardEpoch: Double) -> Angle{
@@ -312,7 +311,7 @@ public class Moon {
         
         //Step1:
         //Convert LCT to UT, GST, and LST times and adjust the date if needed
-        let utDate = lCT2UT(self.date, timeZoneInSeconds: self.timeZoneInSeconds)
+        let utDate = lCT2UT(date, timeZoneInSeconds: self.timeZoneInSeconds)
         let gstDate = uT2GST(utDate)
         let lstDate = gST2LST(gstDate,longitude: longitude)
         
@@ -466,7 +465,7 @@ public class Moon {
         //Compute Altitude for each hour in a day
         
         for date in stride(from: startOfTheDay, to: endOfTheDay, by: 3600){
-        
+            
             altitudeForEachHour.append(getMoonHorizonCoordinatesFrom(date: date).altitude.degrees)
             
         }
@@ -495,7 +494,7 @@ public class Moon {
                     if(moonRiseFound){
                         break
                     }
-                    if ( (-0.25 <= altitudeRise && altitudeRise <= 0.25) &&  !moonRiseFound){
+                    if ( (-0.23 <= altitudeRise && altitudeRise <= 0.23) &&  !moonRiseFound){
                         self.moonriseAzimuth = azimuthRise
                         self.moonRise = date
                         moonRiseFound = true
@@ -512,7 +511,7 @@ public class Moon {
                     if(moonSetFound){
                         break
                     }
-                    if ( (-0.25 <= altitudeSet && altitudeSet <= 0.25) &&  !moonSetFound){
+                    if ( (-0.23 <= altitudeSet && altitudeSet <= 0.23) &&  !moonSetFound){
                         
                         self.moonsetAzimuth = azimuthSet
                         self.moonSet = date
@@ -527,7 +526,7 @@ public class Moon {
             self.moonSet = nil
             self.moonsetAzimuth = nil
         }
-        else if(!moonRiseFound){
+        if(!moonRiseFound){
             
             self.moonRise = nil
             self.moonriseAzimuth = nil
@@ -538,6 +537,7 @@ public class Moon {
     /// Updates moon percentage and age of the moon in days
     private func updateMoonPercentage(){
         
+        let _ = getMoonHorizonCoordinatesFrom(date: self.date) //Used to refresh global variables
         let numeratorAgeOfTheMoon: Double = moonTrueEclipticLongitudeGlobal.degrees - sunEclipticLongitudeGlobal.degrees
         let ageOfTheMoonInD: Double = Double(mod(Int(numeratorAgeOfTheMoon),360)) 
         + numeratorAgeOfTheMoon.truncatingRemainder(dividingBy: 1)
