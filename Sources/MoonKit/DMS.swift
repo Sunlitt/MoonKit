@@ -23,6 +23,8 @@ public struct DMS: Equatable{
         self.isANegativeZero = isANegativeZero
     }
     
+    ///From decimal it will create the corresponding angle in DMS format
+    /// - Parameter decimal: Decimal angle that will be converted in DMS format
     public init(decimal: Double){
         
         //Step1:

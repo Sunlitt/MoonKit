@@ -15,7 +15,6 @@ public struct EclipticCoordinates {
     public var eclipticLatitude: Angle //beta
     public var eclipticLongitude: Angle //lambda
     
-    
     /// Converts ecliptic coordinatates to equatorial coordinates
     /// - Returns: Equatorial coordinates of the instance
     public func ecliptic2Equatorial() -> EquatorialCoordinates{
@@ -52,6 +51,5 @@ public struct EclipticCoordinates {
         let delta: Angle = .init(degrees: moonDeclination.degrees)
         
         return .init(declination: delta, rightAscension: alfa)
-            
     }
 }

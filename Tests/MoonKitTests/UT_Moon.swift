@@ -59,7 +59,6 @@ final class UT_Moon: XCTestCase {
          Naples
          *-------------------------------------------------------------------*/
         
-        
         //Test1: 19/11/22 20:00. Timezone +1. (No daylight saving)
         
         //Step1: Creating moon instance in Naples and with timezone +1

@@ -26,7 +26,7 @@ final class UT_MoonPhase: XCTestCase {
         //Step4:
         XCTAssertTrue(.newMoon != MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         //Step5:
-        ageOfTheMoonInDegreesUnderTest = 359
+        ageOfTheMoonInDegreesUnderTest = 350
         //Step6:
         XCTAssertTrue(.newMoon != MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         //Step7:
@@ -129,7 +129,7 @@ final class UT_MoonPhase: XCTestCase {
     //Test8: Waning Crescent phase
         
         //Step1:
-        ageOfTheMoonInDegreesUnderTest = 359
+        ageOfTheMoonInDegreesUnderTest = 350
         //Step2:
         XCTAssertTrue(.waningCrescent == MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonInDegreesUnderTest))
         //Step3:

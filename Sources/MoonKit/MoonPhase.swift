@@ -46,10 +46,10 @@ public enum MoonPhase: String{
         case _ where ageOfTheMoonInDegrees > 269 && ageOfTheMoonInDegrees < 271:
             return .lastQuarter
         
-        case _ where ageOfTheMoonInDegrees >= 271 && ageOfTheMoonInDegrees <= 359:
+        case _ where ageOfTheMoonInDegrees >= 271 && ageOfTheMoonInDegrees <= 350:
             return .waningCrescent
         
-        case _ where ageOfTheMoonInDegrees > 359 && ageOfTheMoonInDegrees < 360:
+        case _ where ageOfTheMoonInDegrees > 350 && ageOfTheMoonInDegrees < 360:
             return .newMoon
         
         default:
