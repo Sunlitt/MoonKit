@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreLocation
-import SwiftUI
 
 
 public class Moon {

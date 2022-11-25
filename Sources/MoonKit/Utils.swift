@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
-
 
 
 /// This function returns a % n also if a is negative. The standard % function provided by swift doesn't do that

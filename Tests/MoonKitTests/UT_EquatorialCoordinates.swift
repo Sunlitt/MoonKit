@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MoonKit
-import SwiftUI
 
 final class UT_EquatorialCoordinates: XCTestCase {
 
