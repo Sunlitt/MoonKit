@@ -6,3 +6,5 @@ A package that will provide to you all the information that you need about the M
   * MoonSet Time
   * Moon Percentage
   * Moon Phase
+  * MoonRise Azimuth
+  * MoonSet Azimuth
