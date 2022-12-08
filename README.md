@@ -8,3 +8,5 @@ A package that will provide to you all the information that you need about the M
   * Moon Phase
   * MoonRise Azimuth
   * MoonSet Azimuth
+  * Next Full Moon 
+  * Next New Moon
