@@ -213,21 +213,22 @@ public class Moon {
         //Step7: Apply equation to calculate the Moon’s (uncorrected) mean ecliptic longitude.
         var meanEclipticLongitude: Angle = .init(degrees: 13.176339686 * elapsedDaysSinceStandardEpoch + moonEclipticLongitudeAtTheEpoch.degrees)
         
-        //Step8: If necessary,usetheMODfunctiontoputλintotherange[0◦,360◦]
-        meanEclipticLongitude = .init(degrees: Double(mod(Int(meanEclipticLongitude.degrees),360)) + meanEclipticLongitude.degrees.truncatingRemainder(dividingBy: 1))
+        //Step8: If necessary,usethe MOD function to put λ in to the range[0°,360°]
+        meanEclipticLongitude = .init(degrees: extendedMod(meanEclipticLongitude.degrees, 360))
+    
         
         //Step9: Apply equation  to compute the Moon’s (uncorrected) mean ecliptic longitude of the ascending node
         var meanEclipticLongitudeAscndingNode: Angle = .init(degrees: moonEclipticLongitudeAscendingNodeStandarEpoch.degrees -  0.0529539 * elapsedDaysSinceStandardEpoch)
         
         //Step10: If necessary, adjust to be in the range [0◦ , 360◦ ] (i.e., MOD 360°)
-        meanEclipticLongitudeAscndingNode = .init(degrees: Double(mod(Int(meanEclipticLongitudeAscndingNode.degrees),360)) +
-                                                  meanEclipticLongitudeAscndingNode.degrees.truncatingRemainder(dividingBy: 1))
+        meanEclipticLongitudeAscndingNode = .init(degrees: extendedMod(meanEclipticLongitudeAscndingNode.degrees, 360))
         
         //Step11: Apply equation to compute the Moon’s(uncorrected) mean anomaly
         var moonMeanAnomaly: Angle = .init(degrees: meanEclipticLongitude.degrees - 0.1114041 * elapsedDaysSinceStandardEpoch - moonEclipticLongitudePerigee.degrees)
         
         //Step12: Adjust Mm if necessary to be in the range [0◦, 360◦]
-        moonMeanAnomaly = .init(degrees: Double(mod(Int(moonMeanAnomaly.degrees),360)) + moonMeanAnomaly.degrees.truncatingRemainder(dividingBy: 1))
+        moonMeanAnomaly = .init(degrees: extendedMod(moonMeanAnomaly.degrees, 360))
+        
         
         //Step13: Use equation to compute the annual equation correction
         let annualEquationCorrection: Angle = .init(degrees: 0.1858 * sin(sunMeanAnomaly.radians))
@@ -355,21 +356,20 @@ public class Moon {
         //Step7: Apply equation to calculate the Moon’s (uncorrected) mean ecliptic longitude.
         var meanEclipticLongitude: Angle = .init(degrees: 13.176339686 * elapsedDaysSinceStandardEpoch + moonEclipticLongitudeAtTheEpoch.degrees)
         
-        //Step8: If necessary,usetheMODfunctiontoputλintotherange[0◦,360◦]
-        meanEclipticLongitude = .init(degrees: Double(mod(Int(meanEclipticLongitude.degrees),360)) + meanEclipticLongitude.degrees.truncatingRemainder(dividingBy: 1))
+        //Step8: If necessary,use the MOD function to put λ in to the range [0◦,360◦]
+        meanEclipticLongitude = .init(degrees: extendedMod(meanEclipticLongitude.degrees, 360))
         
         //Step9: Apply equation  to compute the Moon’s (uncorrected) mean ecliptic longitude of the ascending node
         var meanEclipticLongitudeAscndingNode: Angle = .init(degrees: moonEclipticLongitudeAscendingNodeStandarEpoch.degrees -  0.0529539 * elapsedDaysSinceStandardEpoch)
         
         //Step10: If necessary, adjust to be in the range [0◦ , 360◦ ] (i.e., MOD 360°)
-        meanEclipticLongitudeAscndingNode = .init(degrees: Double(mod(Int(meanEclipticLongitudeAscndingNode.degrees),360)) +
-                                                  meanEclipticLongitudeAscndingNode.degrees.truncatingRemainder(dividingBy: 1))
+        meanEclipticLongitudeAscndingNode = .init(degrees: extendedMod(meanEclipticLongitudeAscndingNode.degrees, 360))
         
         //Step11: Apply equation to compute the Moon’s(uncorrected) mean anomaly
         var moonMeanAnomaly: Angle = .init(degrees: meanEclipticLongitude.degrees - 0.1114041 * elapsedDaysSinceStandardEpoch - moonEclipticLongitudePerigee.degrees)
         
         //Step12: Adjust Mm if necessary to be in the range [0◦, 360◦]
-        moonMeanAnomaly = .init(degrees: Double(mod(Int(moonMeanAnomaly.degrees),360)) + moonMeanAnomaly.degrees.truncatingRemainder(dividingBy: 1))
+        moonMeanAnomaly = .init(degrees: extendedMod(moonMeanAnomaly.degrees, 360))
         
         //Step13: Use equation to compute the annual equation correction
         let annualEquationCorrection: Angle = .init(degrees: 0.1858 * sin(sunMeanAnomaly.radians))
@@ -538,8 +538,7 @@ public class Moon {
         
         let _ = getMoonHorizonCoordinatesFrom(date: self.date) //Used to refresh global variables
         let numeratorAgeOfTheMoon: Double = moonTrueEclipticLongitudeGlobal.degrees - sunEclipticLongitudeGlobal.degrees
-        let ageOfTheMoonInD: Double = Double(mod(Int(numeratorAgeOfTheMoon),361)) 
-        + numeratorAgeOfTheMoon.truncatingRemainder(dividingBy: 1)
+        let ageOfTheMoonInD: Double = extendedMod(numeratorAgeOfTheMoon, 360)
         ageOfTheMoonInDays = ageOfTheMoonInD / 12.1907
         let ageOfTheMoon: Angle = .init(degrees: 12.1907 * ageOfTheMoonInDays)
         let fMoon: Angle = .init(degrees: (1 - cos(ageOfTheMoon.radians)) / 2)

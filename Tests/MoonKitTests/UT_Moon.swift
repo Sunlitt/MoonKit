@@ -50,6 +50,12 @@ final class UT_Moon: XCTestCase {
     static let timeZoneTromso = 1
     static let timeZoneTromsoDaylightSaving = 2
     
+    /*--------------------------------------------------------------------
+     Bainbridge Island
+     *-------------------------------------------------------------------*/
+    static let bainbridgeLocation: CLLocation = .init(latitude: 47.588889, longitude: -122.527778)
+    static let timeZoneBainbridge = -8
+    
     
     /// Test of  moon azimuth, moonrise, moonset, moon percentage, next new moon, moon phase and next full moon.
     /// Value for expected results have been taken from MoonCalc.org
@@ -284,6 +290,39 @@ final class UT_Moon: XCTestCase {
         XCTAssertTrue(abs(expectedNextFullMoon - moonUnderTest.nextFullMoon) < UT_Moon.nextNewMoonAndFullMoonThreshold)
         XCTAssertTrue(abs(expectedNextNewMoonInDays - moonUnderTest.nextNewMoon) < UT_Moon.nextNewMoonAndFullMoonThreshold)
   
+        /*--------------------------------------------------------------------
+         Bainbridge Island
+         *-------------------------------------------------------------------*/
+        
+        //Test: 21/01/23 12:27. Timezone -8.
+        
+        //Step1: Creating moon instance in Bainbridge Island and with timezone -8)
+        moonUnderTest = Moon.init(location: UT_Moon.bainbridgeLocation, timeZone: Double(UT_Moon.timeZoneBainbridge))
+        
+        //Step2: Setting 21/01/23 12:27 as date.
+        dateUnderTest = createDateCurrentTimeZone(day: 21, month: 01, year: 2023, hour: 12, minute: 27, seconds: 00)
+        moonUnderTest.setDate(dateUnderTest)
+        
+        //Step3: Saving expected outputs
+        expectedAzimuth = 180.45
+        expectedAltitude = 16.79
+        expectedMoonRise = createDateCurrentTimeZone(day: 21, month: 01, year: 2023, hour: 8, minute: 19, seconds: 40)
+        expectedMoonset = createDateCurrentTimeZone(day: 21, month: 01, year: 2023, hour: 16, minute: 37, seconds: 34)
+        expectedMoonPhase = .newMoon
+        expectedMoonPercentage = 0.2
+        expectedNextFullMoon = 14
+        expectedNextNewMoonInDays = 0
+        
+        //Step4: Check if the output are close to the expected ones
+        XCTAssertTrue(expectedMoonPhase == moonUnderTest.currentMoonPhase)
+        XCTAssertTrue(abs(expectedMoonPercentage - moonUnderTest.moonPercentage) <  UT_Moon.moonPercentageThreshold)
+        XCTAssertTrue(abs(expectedAzimuth - moonUnderTest.azimuth) <  UT_Moon.moonAzimuthThreshold)
+        XCTAssertTrue(abs(expectedAltitude - moonUnderTest.altitude) <  UT_Moon.moonAltitudeThreshold)
+        XCTAssertTrue(abs(expectedMoonRise.timeIntervalSince1970 - moonUnderTest.moonRise!.timeIntervalSince1970) <  UT_Moon.moonSetRiseThresholdInSeconds)
+        XCTAssertTrue(abs(expectedMoonset.timeIntervalSince1970 - moonUnderTest.moonSet!.timeIntervalSince1970) <  UT_Moon.moonSetRiseThresholdInSeconds)
+        XCTAssertTrue(abs(expectedNextFullMoon - moonUnderTest.nextFullMoon) < UT_Moon.nextNewMoonAndFullMoonThreshold)
+        XCTAssertTrue(abs(expectedNextNewMoonInDays - moonUnderTest.nextNewMoon) < UT_Moon.nextNewMoonAndFullMoonThreshold)
+        
     }
     
     func testPerformance() throws {
