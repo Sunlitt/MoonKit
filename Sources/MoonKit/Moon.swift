@@ -538,7 +538,7 @@ public class Moon {
         
         let _ = getMoonHorizonCoordinatesFrom(date: self.date) //Used to refresh global variables
         let numeratorAgeOfTheMoon: Double = moonTrueEclipticLongitudeGlobal.degrees - sunEclipticLongitudeGlobal.degrees
-        let ageOfTheMoonInD: Double = Double(mod(Int(numeratorAgeOfTheMoon),360)) 
+        let ageOfTheMoonInD: Double = Double(mod(Int(numeratorAgeOfTheMoon),361)) 
         + numeratorAgeOfTheMoon.truncatingRemainder(dividingBy: 1)
         ageOfTheMoonInDays = ageOfTheMoonInD / 12.1907
         let ageOfTheMoon: Angle = .init(degrees: 12.1907 * ageOfTheMoonInDays)
