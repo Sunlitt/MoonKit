@@ -27,3 +27,10 @@
 ## References
 
 * Celestial Calculations: A Gentle Introduction to Computational Astronomy: [Link](https://www.amazon.it/Celestial-Calculations-Introduction-Computational-Astronomy/dp/0262536633/ref=sr_1_1?__mk_it_IT=ÅMÅŽÕÑ&crid=1U99GMGDZ2CUF&keywords=celestial+calculations&qid=1674408445&sprefix=celestial+calculation%2Caps%2C109&sr=8-1).
+
+## SunKit
+
+Take a look to the other Package, this time about the Sun ☀️: [SunKit](https://github.com/Sunlitt/SunKit).
+
+
+
