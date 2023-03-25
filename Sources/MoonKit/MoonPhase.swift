@@ -10,15 +10,15 @@ import Foundation
 
 public enum MoonPhase: String{
     
-    case newMoon = "New Moon"
+    case newMoon        = "New Moon"
     case waxingCrescent = "Waxing Crescent"
-    case firstQuarter = "First Quarter"
-    case waxingGibbous = "Waxing Gibbous"
-    case fullMoon = "Full Moon"
-    case waningGibbous = "Waning Gibbous"
-    case lastQuarter = "Last Quarter"
+    case firstQuarter   = "First Quarter"
+    case waxingGibbous  = "Waxing Gibbous"
+    case fullMoon       = "Full Moon"
+    case waningGibbous  = "Waning Gibbous"
+    case lastQuarter    = "Last Quarter"
     case waningCrescent = "Waning Crescent"
-    case error = "Error during computing moon phase"
+    case error          = "Error during computing moon phase"
     
 
     public static func ageOfTheMoonDegrees2MoonPhase(_ ageOfTheMoonInDegrees: Double) -> MoonPhase{

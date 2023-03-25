@@ -15,7 +15,8 @@ public class Moon {
      Public get Variables
      *-------------------------------------------------------------------*/
     public private(set) var location: CLLocation
-    public private(set) var timeZone: Double
+    public private(set) var timeZone: TimeZone
+    public private(set) var useSameTimeZone: Bool
     public private(set) var date: Date = Date()
     
     ///Date  of moonrise in local timezone, nill if moonrise not found
@@ -30,10 +31,6 @@ public class Moon {
     public private(set) var moonPercentage: Double = 0
     public private(set) var ageOfTheMoonInDays: Double = 0
     
-    
-    public static let common: Moon = {
-        return Moon(location: CLLocation(latitude: 37.334886, longitude: -122.008988), timeZone: -7)
-    } ()
     
     public var azimuth: Double {
         return self.moonHorizonCoordinates.azimuth.degrees
@@ -69,17 +66,33 @@ public class Moon {
         return  Int(round(29.5 - ageOfTheMoonInDays))
     }
     
-        
+    
     /*--------------------------------------------------------------------
      Private Variables
      *-------------------------------------------------------------------*/
-    private var calendar: Calendar = .init(identifier: .gregorian)
+    private var calendar: Calendar {
+        var calendar: Calendar = .init(identifier: .gregorian)
+        calendar.timeZone      =  useSameTimeZone ?  .current : self.timeZone
+        
+        return calendar
+    }
+    
+    private var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .current
+        dateFormatter.timeZone = useSameTimeZone ?  .current : self.timeZone
+        dateFormatter.timeStyle = useSameTimeZone ? .short   : .full
+        dateFormatter.dateStyle = .full
+        return dateFormatter
+    }
+    
+    
     private var timeZoneInSeconds: Int {
-        Int(timeZone * 3600)
+        timeZone.secondsFromGMT()
     }
     private var moonHorizonCoordinates: HorizonCoordinates = .init(altitude: .zero, azimuth: .zero)
     private var moonEquatorialCoordinates: EquatorialCoordinates = .init(declination: .zero)
-    private var moonEclipticCoordinates: EclipticCoordinates = .init(eclipticLatitude: .zero, eclipticLongitude: .zero)
+    public var moonEclipticCoordinates: EclipticCoordinates = .init(eclipticLatitude: .zero, eclipticLongitude: .zero)
     
     //Moon constants
     private let moonEclipticLongitudeAtTheEpoch: Angle = .init(degrees: 218.316433)
@@ -97,42 +110,109 @@ public class Moon {
     
     
     /*--------------------------------------------------------------------
-     Public methods
+     Initializers
      *-------------------------------------------------------------------*/
     
-    public init(location: CLLocation,timeZone: Double) {
+    public init(location: CLLocation,timeZone: Double, useSameTimeZone: Bool = false) {
+        let timeZoneSeconds: Int = Int(timeZone * SECONDS_IN_ONE_HOUR)
+        self.timeZone = TimeZone.init(secondsFromGMT: timeZoneSeconds) ?? .current
+        self.location = location
+        self.useSameTimeZone = useSameTimeZone
+        refresh()
+    }
+    
+    public init(location: CLLocation,timeZone: TimeZone, useSameTimeZone: Bool = false) {
         self.timeZone = timeZone
         self.location = location
+        self.useSameTimeZone = useSameTimeZone
         refresh()
     }
+    
+/*--------------------------------------------------------------------
+Public methods
+*-------------------------------------------------------------------*/
+    
+    /*--------------------------------------------------------------------
+     Changing date of interest
+     *-------------------------------------------------------------------*/
     
     public func setDate(_ newDate: Date) {
+        let newDay = calendar.dateComponents([.day,.month,.year], from: newDate)
+        let oldDay = calendar.dateComponents([.day,.month,.year], from: date)
+        
+        let isSameDay: Bool = (newDay == oldDay)
         date = newDate
+        
+        refresh(needToComputeSunEvents: !isSameDay)  //If is the same day no need to compute again Daily Moon Events
+    }
+    
+    /*--------------------------------------------------------------------
+     Changing Location
+     *-------------------------------------------------------------------*/
+    
+    
+    /// Changing location and timezone
+    /// - Parameters:
+    ///   - newLocation: New location
+    ///   - newTimeZone: New timezone for the given location. Is highly recommanded to pass a Timezone initialized via .init(identifier: ) method
+    public func setLocation(_ newLocation: CLLocation,_ newTimeZone: TimeZone) {
+        timeZone = newTimeZone
+        location = newLocation
         refresh()
     }
     
+    /// Changing only the location
+    /// - Parameter newLocation: New Location
     public func setLocation(_ newLocation: CLLocation) {
         location = newLocation
         refresh()
     }
     
-    public func setTimeZone(_ newTimeZone: Double) {
+    
+    /// Is highly recommanded to use the other method to change both location and timezone. This will be kept only for backwards retrocompatibility.
+    /// - Parameters:
+    ///   - newLocation: New Location
+    ///   - newTimeZone: New Timezone express in Double. For timezones which differs of half an hour add 0.5,
+    public func setLocation(_ newLocation: CLLocation,_ newTimeZone: Double) {
+        let timeZoneSeconds: Int = Int(newTimeZone * SECONDS_IN_ONE_HOUR)
+        timeZone = TimeZone(secondsFromGMT: timeZoneSeconds) ?? .current
+        location = newLocation
+        refresh()
+    }
+    /*--------------------------------------------------------------------
+     Changing Timezone
+     *-------------------------------------------------------------------*/
+    
+    /// Changing only the timezone.
+    /// - Parameter newTimeZone: New Timezone
+    public func setTimeZone(_ newTimeZone: TimeZone) {
         timeZone = newTimeZone
         refresh()
     }
     
-    /*--------------------------------------------------------------------
-     Private methods
-     *-------------------------------------------------------------------*/
+    /// Is highly recommanded to use the other method to change timezone. This will be kept only for backwards retrocompatibility.
+    /// - Parameter newTimeZone: New Timezone express in Double. For timezones which differs of half an hour add 0.5,
+    public func setTimeZone(_ newTimeZone: Double) {
+        let timeZoneSeconds: Int = Int(newTimeZone * SECONDS_IN_ONE_HOUR)
+        timeZone = TimeZone(secondsFromGMT: timeZoneSeconds) ?? .current
+        refresh()
+    }
+    
+/*--------------------------------------------------------------------
+Private methods
+*-------------------------------------------------------------------*/
     
     
     /// Updates in order all the moon coordinates: horizon, ecliptic and equatorial.
     /// Then get rise and set times.
     /// then update the moon percentage and age of the moon in days
-    private func refresh(){
+    private func refresh(needToComputeSunEvents: Bool = true){
+       
         updateMoonCoordinates()
         updateMoonPercentage()
-        getRiseAndSetDates()
+        if(needToComputeSunEvents){
+            getRiseAndSetDates()
+        }
     }
     
     private func getSunMeanAnomaly(from elapsedDaysSinceStandardEpoch: Double) -> Angle{
@@ -165,15 +245,18 @@ public class Moon {
     /// Updates Horizon coordinates, Ecliptic coordinates and Equatorial coordinates of the moon
     private func updateMoonCoordinates(){
         
+        var calendarUTC: Calendar = .init(identifier: .gregorian)
+        calendarUTC.timeZone = TimeZone(identifier: "GMT")!
         
         //Step1:
         //Convert LCT to UT, GST, and LST times and adjust the date if needed
-        let utDate = lCT2UT(self.date, timeZoneInSeconds: self.timeZoneInSeconds)
-        let gstDate = uT2GST(utDate)
-        let lstDate = gST2LST(gstDate,longitude: longitude)
         
-        let lstDecimal = HMS.init(from: lstDate).hMS2Decimal()
-        let utHMS = HMS.init(from: utDate)
+        let utDate = lCT2UT(self.date, timeZoneInSeconds: self.timeZoneInSeconds,useSameTimeZone: self.useSameTimeZone)
+        let gstHMS = uT2GST(utDate,useSameTimeZone: self.useSameTimeZone)
+        let lstHMS = gST2LST(gstHMS,longitude: longitude)
+        
+        let lstDecimal = lstHMS.hMS2Decimal()
+        let utHMS = HMS.init(from: utDate,useSameTimeZone: self.useSameTimeZone)
         
         //Step2:
         //Compute TT
@@ -190,9 +273,9 @@ public class Moon {
         
         ttHMS = HMS.init(decimal: ttDecimal)
         
-        let utDay = calendar.component(.day, from: utDate)
-        let utMonth = calendar.component(.month, from: utDate)
-        let utYear = calendar.component(.year, from: utDate)
+        let utDay = calendarUTC.component(.day, from: utDate)
+        let utMonth = calendarUTC.component(.month, from: utDate)
+        let utYear = calendarUTC.component(.year, from: utDate)
         let nanoseconds = Int(ttHMS.seconds.truncatingRemainder(dividingBy: 1) * 100)
         
         
@@ -215,7 +298,7 @@ public class Moon {
         
         //Step8: If necessary,usethe MOD function to put λ in to the range[0°,360°]
         meanEclipticLongitude = .init(degrees: extendedMod(meanEclipticLongitude.degrees, 360))
-    
+        
         
         //Step9: Apply equation  to compute the Moon’s (uncorrected) mean ecliptic longitude of the ascending node
         var meanEclipticLongitudeAscndingNode: Angle = .init(degrees: moonEclipticLongitudeAscendingNodeStandarEpoch.degrees -  0.0529539 * elapsedDaysSinceStandardEpoch)
@@ -306,17 +389,23 @@ public class Moon {
         moonHorizonCoordinates = moonEquatorialCoordinates.equatorial2Horizon(lstDecimal: lstDecimal,latitude: latitude) ?? .init(altitude: .zero, azimuth: .zero)
     }
     
-    
     private func getMoonHorizonCoordinatesFrom(date: Date) -> HorizonCoordinates{
+        
+        var calendarUTC: Calendar = .init(identifier: .gregorian)
+        calendarUTC.timeZone = TimeZone(identifier: "GMT")!
+        
+        let calendarToUse: Calendar = self.useSameTimeZone ? self.calendar : calendarUTC
         
         //Step1:
         //Convert LCT to UT, GST, and LST times and adjust the date if needed
-        let utDate = lCT2UT(date, timeZoneInSeconds: self.timeZoneInSeconds)
-        let gstDate = uT2GST(utDate)
-        let lstDate = gST2LST(gstDate,longitude: longitude)
         
-        let lstDecimal = HMS.init(from: lstDate).hMS2Decimal()
-        let utHMS = HMS.init(from: utDate)
+        let utDate  = lCT2UT(date, timeZoneInSeconds: self.timeZoneInSeconds,useSameTimeZone: self.useSameTimeZone)
+        
+        let gstHMS = uT2GST(utDate,useSameTimeZone: self.useSameTimeZone)
+        let lstHMS = gST2LST(gstHMS,longitude: longitude)
+        
+        let lstDecimal = lstHMS.hMS2Decimal()
+        let utHMS = HMS.init(from: utDate,useSameTimeZone: self.useSameTimeZone)
         
         //Step2:
         //Compute TT
@@ -331,11 +420,11 @@ public class Moon {
         //Step4:
         //Compute the Julian day number for the desired date using the Greenwich date and TT
         
-        ttHMS = HMS.init(decimal: ttDecimal) 
+        ttHMS = HMS.init(decimal: ttDecimal)
         
-        let utDay = calendar.component(.day, from: utDate)
-        let utMonth = calendar.component(.month, from: utDate)
-        let utYear = calendar.component(.year, from: utDate)
+        let utDay = calendarToUse.component(.day, from: utDate)
+        let utMonth = calendarToUse.component(.month, from: utDate)
+        let utYear = calendarToUse.component(.year, from: utDate)
         let nanoseconds = Int(ttHMS.seconds.truncatingRemainder(dividingBy: 1) * 100)
         
         
@@ -397,7 +486,7 @@ public class Moon {
         //Step19: Apply equation 7.3.10 to calculate the Moon’s true ecliptic longitude.
         moonTrueEclipticLongitudeGlobal = .init(degrees: correctedMeanEclipticLongitude.degrees + variationCorrection.degrees)
         
-    
+        
         //Step20:Apply equation to compute a corrected ecliptic longitude of the ascending node
         let moonCorrectedEclipticLongitudeAscendingNode: Angle = .init(degrees:meanEclipticLongitudeAscndingNode.degrees - 0.16 * sin(sunMeanAnomaly.radians))
         
@@ -460,24 +549,23 @@ public class Moon {
         let startOfTheDay = calendar.startOfDay(for: date)
         let secondsInOneDay = 86399
         let endOfTheDay = calendar.date(byAdding: .second, value: secondsInOneDay, to: calendar.startOfDay(for: date))!
-
+        
         //Compute Altitude for each hour in a day
         
         for date in stride(from: startOfTheDay, to: endOfTheDay, by: 3600){
             
             altitudeForEachHour.append(getMoonHorizonCoordinatesFrom(date: date).altitude.degrees)
-            
         }
         //Append also altitude at 23:59 of the date in instance
         altitudeForEachHour.append(getMoonHorizonCoordinatesFrom(date: endOfTheDay).altitude.degrees)
-
+        
         //Searching the right bin
         for index in 1...24{
             
             if(moonRiseFound && moonSetFound){
                 break
             }
-        
+            
             //MoonRise found
             if(0 >= altitudeForEachHour[index - 1] && 0 <= altitudeForEachHour[index]){
                 
@@ -486,7 +574,7 @@ public class Moon {
                 
                 //Dividing the bin in intervals of 1 minute each
                 for date in stride(from: binRiseHourStart, to: binRiseHourEnd, by: 60){
-                
+                    
                     let horizonCoordinates = getMoonHorizonCoordinatesFrom(date: date)
                     let altitudeRise = horizonCoordinates.altitude.degrees
                     let azimuthRise = horizonCoordinates.azimuth.degrees
@@ -499,7 +587,7 @@ public class Moon {
                         moonRiseFound = true
                     }
                 }
-            //MoonSet found
+                //MoonSet found
             } else if(0 <= altitudeForEachHour[index - 1] && 0 >= altitudeForEachHour[index]) {
                 
                 //Dividing the bin in intervals of 1 minute each
