@@ -68,17 +68,18 @@ final class UT_Moon: XCTestCase {
         //Test1: 19/11/22 20:00. Timezone +1. (No daylight saving)
         
         //Step1: Creating moon instance in Naples and with timezone +1
-        var moonUnderTest = Moon.init(location: UT_Moon.naplesLocation, timeZone: Double(UT_Moon.timeZoneNaples))
+        var timeZoneUnderTest: TimeZone = .init(secondsFromGMT: UT_Moon.timeZoneNaples * Int(SECONDS_IN_ONE_HOUR)) ?? .current
+        var moonUnderTest = Moon.init(location: UT_Moon.naplesLocation, timeZone: timeZoneUnderTest)
         
         //Step2: Setting 19/11/22 20:00 as date. (No daylight saving)
-        var dateUnderTest = createDateCurrentTimeZone(day: 19, month: 11, year: 2022, hour: 20, minute: 00, seconds: 00)
+        var dateUnderTest = createDateCustomTimeZone(day: 19, month: 11, year: 2022, hour: 20, minute: 00, seconds: 00, timeZone: timeZoneUnderTest)
         moonUnderTest.setDate(dateUnderTest)
         
         //Step3: Saving expected outputs
         var expectedAzimuth = 349.29
         var expectedAltitude = -47.96
-        var expectedMoonRise = createDateCurrentTimeZone(day: 19, month: 11, year: 2022, hour: 1, minute: 37, seconds: 0)
-        var expectedMoonset = createDateCurrentTimeZone(day: 19, month: 11, year: 2022, hour: 14, minute: 28, seconds: 27)
+        var expectedMoonRise = createDateCustomTimeZone(day: 19, month: 11, year: 2022, hour: 1, minute: 37, seconds: 0, timeZone: timeZoneUnderTest)
+        var expectedMoonset = createDateCustomTimeZone(day: 19, month: 11, year: 2022, hour: 14, minute: 28, seconds: 27, timeZone: timeZoneUnderTest)
         var expectedMoonPhase: MoonPhase = .waningCrescent
         var expectedMoonPercentage = 20.1
         var expectedNextFullMoon: Int = 18
@@ -99,16 +100,18 @@ final class UT_Moon: XCTestCase {
         //Test2: 2/11/22 09:31. Timezone +1. (No daylight saving). Moonset shall be NIL in this test
         
         //Step1: Creating moon instance in Naples and with timezone +1
-        moonUnderTest = Moon.init(location: UT_Moon.naplesLocation, timeZone: Double(UT_Moon.timeZoneNaples))
+        timeZoneUnderTest = .init(secondsFromGMT: UT_Moon.timeZoneNaples * Int(SECONDS_IN_ONE_HOUR)) ?? .current
+        
+        moonUnderTest = Moon.init(location: UT_Moon.naplesLocation, timeZone: timeZoneUnderTest)
         
         //Step2: Setting 2/11/22 09:31 as date. (No daylight saving)
-        dateUnderTest = createDateCurrentTimeZone(day: 2, month: 11, year: 2022, hour: 9, minute: 31, seconds: 00)
+        dateUnderTest = createDateCustomTimeZone(day: 2, month: 11, year: 2022, hour: 9, minute: 31, seconds: 00, timeZone: timeZoneUnderTest)
         moonUnderTest.setDate(dateUnderTest)
         
         //Step3: Saving expected outputs
         expectedAzimuth = 64.16
         expectedAltitude = -52.91
-        expectedMoonRise = createDateCurrentTimeZone(day: 2, month: 11, year: 2022, hour: 14, minute: 22, seconds: 44)
+        expectedMoonRise = createDateCustomTimeZone(day: 2, month: 11, year: 2022, hour: 14, minute: 22, seconds: 44, timeZone: timeZoneUnderTest)
         //expectedMoonset shall be NIL
         expectedMoonPhase = .waxingGibbous
         expectedMoonPercentage = 62.3
@@ -133,17 +136,18 @@ final class UT_Moon: XCTestCase {
         //Test: 1/08/22 16:50. Timezone +9.
         
         //Step1: Creating moon instance in Tokyo and with timezone +9
-        moonUnderTest = Moon.init(location: UT_Moon.tokyoLocation, timeZone: Double(UT_Moon.timeZoneTokyo))
+        timeZoneUnderTest = .init(secondsFromGMT: UT_Moon.timeZoneTokyo * Int(SECONDS_IN_ONE_HOUR)) ?? .current
+        moonUnderTest = Moon.init(location: UT_Moon.tokyoLocation, timeZone: timeZoneUnderTest)
         
         //Step2: Setting 1/08/22 16:50 as date.
-        dateUnderTest = createDateCurrentTimeZone(day: 1, month: 8, year: 2022, hour: 16, minute: 50, seconds: 00)
+        dateUnderTest = createDateCustomTimeZone(day: 1, month: 8, year: 2022, hour: 16, minute: 50, seconds: 00, timeZone: timeZoneUnderTest)
         moonUnderTest.setDate(dateUnderTest)
         
         //Step3: Saving expected outputs
         expectedAzimuth = 237.94
         expectedAltitude = 47.15
-        expectedMoonRise = createDateCurrentTimeZone(day: 1, month: 8, year: 2022, hour: 7, minute: 44, seconds: 09)
-        expectedMoonset = createDateCurrentTimeZone(day: 1, month: 8, year: 2022, hour: 20, minute: 57, seconds: 16)
+        expectedMoonRise = createDateCustomTimeZone(day: 1, month: 8, year: 2022, hour: 7, minute: 44, seconds: 09, timeZone: timeZoneUnderTest)
+        expectedMoonset = createDateCustomTimeZone(day: 1, month: 8, year: 2022, hour: 20, minute: 57, seconds: 16, timeZone: timeZoneUnderTest)
         expectedMoonPhase = .waxingCrescent
         expectedMoonPercentage = 12.0
         expectedNextFullMoon = 11
@@ -167,17 +171,18 @@ final class UT_Moon: XCTestCase {
         //Test:  1/01/15 22:00. Timezone -5.
         
         //Step1: Creating moon instance in Louisa and with timezone -5 (No daylight saving)
-        moonUnderTest = Moon.init(location: UT_Moon.louisaLocation, timeZone: Double(UT_Moon.timeZoneLouisa))
+        timeZoneUnderTest = .init(secondsFromGMT: UT_Moon.timeZoneLouisa * Int(SECONDS_IN_ONE_HOUR)) ?? .current
+        moonUnderTest = Moon.init(location: UT_Moon.louisaLocation, timeZone: timeZoneUnderTest)
         
         //Step2: Setting 1/01/15 22:00 as date. (No daylight saving)
-        dateUnderTest = createDateCurrentTimeZone(day: 1, month: 1, year: 2015, hour: 22, minute: 00, seconds: 00)
+        dateUnderTest = createDateCustomTimeZone(day: 1, month: 1, year: 2015, hour: 22, minute: 00, seconds: 00, timeZone: timeZoneUnderTest)
         moonUnderTest.setDate(dateUnderTest)
         
         //Step3: Saving expected outputs
         expectedAzimuth = 191.53
         expectedAltitude = 68.73
-        expectedMoonRise = createDateCurrentTimeZone(day: 1, month: 1, year: 2015, hour: 14, minute: 32, seconds: 40)
-        expectedMoonset = createDateCurrentTimeZone(day: 1, month: 1, year: 2015, hour: 3, minute: 56, seconds: 37)
+        expectedMoonRise = createDateCustomTimeZone(day: 1, month: 1, year: 2015, hour: 14, minute: 32, seconds: 40, timeZone: timeZoneUnderTest)
+        expectedMoonset = createDateCustomTimeZone(day: 1, month: 1, year: 2015, hour: 3, minute: 56, seconds: 37, timeZone: timeZoneUnderTest)
         expectedMoonPhase = .waxingGibbous
         expectedMoonPercentage = 90.4
         expectedNextFullMoon = 3
@@ -202,10 +207,11 @@ final class UT_Moon: XCTestCase {
         //Test: 19/01/22 17:31. Timezone +1. Both moonrise and moonset nil. Moon never set
         
         //Step1: Creating moon instance in Tromso and with timezone +1 (No daylight saving)
-        moonUnderTest = Moon.init(location: UT_Moon.tromsoLocation, timeZone: Double(UT_Moon.timeZoneTromso))
+        timeZoneUnderTest = .init(secondsFromGMT: UT_Moon.timeZoneTromso * Int(SECONDS_IN_ONE_HOUR)) ?? .current
+        moonUnderTest = Moon.init(location: UT_Moon.tromsoLocation, timeZone: timeZoneUnderTest)
         
         //Step2: Setting 19/01/22 17:31 as date. (No daylight saving)
-        dateUnderTest = createDateCurrentTimeZone(day: 19, month: 1, year: 2022, hour: 17, minute: 31, seconds: 00)
+        dateUnderTest = createDateCustomTimeZone(day: 19, month: 1, year: 2022, hour: 17, minute: 31, seconds: 00, timeZone: timeZoneUnderTest)
         moonUnderTest.setDate(dateUnderTest)
         
         //Step3: Saving expected outputs
@@ -232,11 +238,13 @@ final class UT_Moon: XCTestCase {
         
         //Test: 11/07/22 12:28. Timezone +2. Both moonrise and moonset nil. Moon never rises
         
+        timeZoneUnderTest = .init(secondsFromGMT: UT_Moon.timeZoneTromsoDaylightSaving * Int(SECONDS_IN_ONE_HOUR)) ?? .current
+        
         //Step1: Creating moon instance in Tromso and with timezone +2 (daylight saving)
-        moonUnderTest = Moon.init(location: UT_Moon.tromsoLocation, timeZone: Double(UT_Moon.timeZoneTromsoDaylightSaving))
+        moonUnderTest = Moon.init(location: UT_Moon.tromsoLocation, timeZone: timeZoneUnderTest)
         
         //Step2: Setting 19/01/22 17:31 as date. ( daylight saving)
-        dateUnderTest = createDateCurrentTimeZone(day: 11, month: 7, year: 2022, hour: 12, minute: 28, seconds: 00)
+        dateUnderTest = createDateCustomTimeZone(day: 11, month: 7, year: 2022, hour: 12, minute: 28, seconds: 00, timeZone: timeZoneUnderTest)
         moonUnderTest.setDate(dateUnderTest)
         
         //Step3: Saving expected outputs
@@ -266,14 +274,14 @@ final class UT_Moon: XCTestCase {
         moonUnderTest = Moon.init(location: UT_Moon.tromsoLocation, timeZone: Double(UT_Moon.timeZoneTromsoDaylightSaving))
         
         //Step2: Setting 20/07/22 17:50 as date. (daylight saving)
-        dateUnderTest = createDateCurrentTimeZone(day: 20, month: 07, year: 2022, hour: 17, minute: 50, seconds: 00)
+        dateUnderTest = createDateCustomTimeZone(day: 20, month: 07, year: 2022, hour: 17, minute: 50, seconds: 00, timeZone: timeZoneUnderTest)
         moonUnderTest.setDate(dateUnderTest)
         
         //Step3: Saving expected outputs
         expectedAzimuth = 347.50
         expectedAltitude = -11.61
-        expectedMoonRise = createDateCurrentTimeZone(day: 20, month: 07, year: 2022, hour: 22, minute: 50, seconds: 38)
-        expectedMoonset = createDateCurrentTimeZone(day: 20, month: 07, year: 2022, hour: 14, minute: 06, seconds: 40)
+        expectedMoonRise = createDateCustomTimeZone(day: 20, month: 07, year: 2022, hour: 22, minute: 50, seconds: 38, timeZone: timeZoneUnderTest)
+        expectedMoonset = createDateCustomTimeZone(day: 20, month: 07, year: 2022, hour: 14, minute: 06, seconds: 40, timeZone: timeZoneUnderTest)
         expectedMoonPhase = .lastQuarter
         expectedMoonPercentage = 49.5
         expectedNextFullMoon = 23
@@ -297,17 +305,18 @@ final class UT_Moon: XCTestCase {
         //Test: 21/01/23 12:27. Timezone -8.
         
         //Step1: Creating moon instance in Bainbridge Island and with timezone -8)
-        moonUnderTest = Moon.init(location: UT_Moon.bainbridgeLocation, timeZone: Double(UT_Moon.timeZoneBainbridge))
+        timeZoneUnderTest = .init(secondsFromGMT: Int(UT_Moon.timeZoneBainbridge * Int(SECONDS_IN_ONE_HOUR))) ?? .current
+        moonUnderTest = Moon.init(location: UT_Moon.bainbridgeLocation, timeZone: timeZoneUnderTest)
         
         //Step2: Setting 21/01/23 12:27 as date.
-        dateUnderTest = createDateCurrentTimeZone(day: 21, month: 01, year: 2023, hour: 12, minute: 27, seconds: 00)
+        dateUnderTest = createDateCustomTimeZone(day: 21, month: 01, year: 2023, hour: 12, minute: 27, seconds: 00, timeZone: timeZoneUnderTest)
         moonUnderTest.setDate(dateUnderTest)
         
         //Step3: Saving expected outputs
         expectedAzimuth = 180.45
         expectedAltitude = 16.79
-        expectedMoonRise = createDateCurrentTimeZone(day: 21, month: 01, year: 2023, hour: 8, minute: 19, seconds: 40)
-        expectedMoonset = createDateCurrentTimeZone(day: 21, month: 01, year: 2023, hour: 16, minute: 37, seconds: 34)
+        expectedMoonRise = createDateCustomTimeZone(day: 21, month: 01, year: 2023, hour: 8, minute: 19, seconds: 40, timeZone: timeZoneUnderTest)
+        expectedMoonset = createDateCustomTimeZone(day: 21, month: 01, year: 2023, hour: 16, minute: 37, seconds: 34, timeZone: timeZoneUnderTest)
         expectedMoonPhase = .newMoon
         expectedMoonPercentage = 0.2
         expectedNextFullMoon = 14
@@ -332,7 +341,7 @@ final class UT_Moon: XCTestCase {
         let moonUnderTest = Moon.init(location: UT_Moon.naplesLocation, timeZone: Double(UT_Moon.timeZoneNaples))
         
         //Step2: Setting 19/11/22 20:00 as date.
-        let dateUnderTest = createDateCurrentTimeZone(day: 19, month: 11, year: 2022, hour: 20, minute: 00, seconds: 00)
+        let dateUnderTest = createDateCurrentTimeZone(day: 21, month: 01, year: 2023, hour: 16, minute: 37, seconds: 34)
         
         self.measure {
             moonUnderTest.setDate(dateUnderTest)
