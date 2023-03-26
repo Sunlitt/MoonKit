@@ -18,6 +18,7 @@
   * MoonSet Time
   * Moon Percentage
   * Moon Phase
+  * Moon Astrological Sign
   * MoonRise Azimuth
   * MoonSet Azimuth
   * Next Full Moon 
