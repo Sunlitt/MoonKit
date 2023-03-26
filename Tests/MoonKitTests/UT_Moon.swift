@@ -334,6 +334,22 @@ final class UT_Moon: XCTestCase {
         
     }
     
+    func testOfMoonAstrologicalSign() throws {
+        
+        //Test1: 19/11/22 20:00. Timezone +1. (No daylight saving)
+        
+        //Step1: Creating moon instance in Naples and with timezone +1
+        var timeZoneUnderTest: TimeZone = .init(secondsFromGMT: UT_Moon.timeZoneNaples * Int(SECONDS_IN_ONE_HOUR)) ?? .current
+        var moonUnderTest = Moon.init(location: UT_Moon.naplesLocation, timeZone: timeZoneUnderTest)
+        
+        //Step2: Setting 19/11/22 20:00 as date. (No daylight saving)
+        var dateUnderTest = createDateCustomTimeZone(day: 19, month: 11, year: 2022, hour: 20, minute: 00, seconds: 00, timeZone: timeZoneUnderTest)
+        moonUnderTest.setDate(dateUnderTest)
+        
+        XCTAssert(AstrologicalSign.libra == moonUnderTest.moonSign)
+        
+    }
+    
     func testPerformance() throws {
         // Performance of setDate function that will refresh all the moon variables
         

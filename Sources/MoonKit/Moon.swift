@@ -66,6 +66,12 @@ public class Moon {
         return  Int(round(29.5 - ageOfTheMoonInDays))
     }
     
+    ///Astrological sign of the moon for the given location and date
+    public var moonSign: AstrologicalSign {
+        
+        return AstrologicalSign.eclipticLongitude2AstrologicalSign(moonEclipticCoordinates.eclipticLongitude)
+        
+    }
     
     /*--------------------------------------------------------------------
      Private Variables
