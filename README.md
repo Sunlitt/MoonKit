@@ -11,9 +11,84 @@
 </div>
 
 **MoonKit** is a Swift package which uses math and trigonometry to compute several information about the Moon. 
+
+## Usage
+SunKit only needs a location and the relative time zone to compute every Moon information.  
+Everything is computed locally, no internet connection is needed.
+
+### Creating a Moon 
+
+```swift
+
+// Creating a CLLocation object with the coordinates you are interested in
+let naplesLocation: CLLocation = .init(latitude: 40.84014, longitude: 14.25226)
+
+// Timezone for the location of interest. It's highly recommended to initialize it via identifier
+let timeZoneNaples: Timezone = .init(identifier: "Europe/Rome") ?? .current
+
+// Creating the Sun instance which will store all the information you need about sun events and his position
+var myMoon: Moon = .init(location: naplesLocation, timeZone: timeZoneNaples)
+
+```
+
+### Retrieve information
+
+```swift
+// Creating a Date instance
+let myDate: Date = Date() // Your current date
+
+// Setting inside mySun object the date of interest
+myMoon.setDate(myDate)
+
+      // All the following informations are related to the given location for the date that has just been set
+
+// Azimuth of the Moon 
+myMoon.azimuth  
+
+// Altitude of the Moon
+myMoon.altitude
+
+// Moonrise Date
+myMoon.moonRise
+
+// Moonset Date
+myMoon.moonSet
+
+// ACurrent Moon Phase
+myMoon.currentMoonPhase
+
+// Moon Astrological sign
+myMoon.moonSign
+
+// To know all the information you can retrieve go to the **Features** section.
+
+
+```
+ ### Working with Timezones and Dates
+ 
+ 
+To properly show the Sun Date Events use the following DateFormatter.
+
+```swift
+
+ //Creting a DateFormatter
+ let dateFormatter =  DateFormatter()
+ 
+ //Properly setting his attributes
+ dateFormatter.locale    =  .current
+ dateFormatter.timeZone  =  timeZoneNaples  // It shall be the same as the one used to initilize myMoon
+ dateFormatter.timeStyle = .full
+ dateFormatter.dateStyle = .full
+  
+ //Printing Sun Date Events with the correct Timezone
+  
+ print("Moonrise: \(dateFormatter.string(from: myMoon.moonRise))")
+    
+```
   
 ## Features
   * Moon Azimuth
+  * Moon Altitude
   * MoonRise Time
   * MoonSet Time
   * Moon Percentage
