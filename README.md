@@ -13,7 +13,7 @@
 **MoonKit** is a Swift package which uses math and trigonometry to compute several information about the Moon. 
 
 ## Usage
-SunKit only needs a location and the relative time zone to compute every Moon information.  
+MoonKit only needs a location and the relative time zone to compute every Moon information.  
 Everything is computed locally, no internet connection is needed.
 
 ### Creating a Moon 
@@ -26,7 +26,7 @@ let naplesLocation: CLLocation = .init(latitude: 40.84014, longitude: 14.25226)
 // Timezone for the location of interest. It's highly recommended to initialize it via identifier
 let timeZoneNaples: Timezone = .init(identifier: "Europe/Rome") ?? .current
 
-// Creating the Sun instance which will store all the information you need about sun events and his position
+// Creating the Moon instance which will store all the information you need about Moon events and her position
 var myMoon: Moon = .init(location: naplesLocation, timeZone: timeZoneNaples)
 
 ```
@@ -37,7 +37,7 @@ var myMoon: Moon = .init(location: naplesLocation, timeZone: timeZoneNaples)
 // Creating a Date instance
 let myDate: Date = Date() // Your current date
 
-// Setting inside mySun object the date of interest
+// Setting inside myMoon object the date of interest
 myMoon.setDate(myDate)
 
       // All the following informations are related to the given location for the date that has just been set
@@ -54,7 +54,7 @@ myMoon.moonRise
 // Moonset Date
 myMoon.moonSet
 
-// ACurrent Moon Phase
+// Current Moon Phase
 myMoon.currentMoonPhase
 
 // Moon Astrological sign
@@ -67,7 +67,7 @@ myMoon.moonSign
  ### Working with Timezones and Dates
  
  
-To properly show the Sun Date Events use the following DateFormatter.
+To properly show the Moon Date Events use the following DateFormatter.
 
 ```swift
 
@@ -80,7 +80,7 @@ To properly show the Sun Date Events use the following DateFormatter.
  dateFormatter.timeStyle = .full
  dateFormatter.dateStyle = .full
   
- //Printing Sun Date Events with the correct Timezone
+ //Printing Moon Date Events with the correct Timezone
   
  print("Moonrise: \(dateFormatter.string(from: myMoon.moonRise))")
     
