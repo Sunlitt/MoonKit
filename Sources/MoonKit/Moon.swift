@@ -94,7 +94,7 @@ public class Moon {
     
     
     private var timeZoneInSeconds: Int {
-        timeZone.secondsFromGMT()
+        timeZone.secondsFromGMT(for: self.date)
     }
     private var moonHorizonCoordinates: HorizonCoordinates = .init(altitude: .zero, azimuth: .zero)
     private var moonEquatorialCoordinates: EquatorialCoordinates = .init(declination: .zero)
