@@ -48,12 +48,12 @@ public class Moon {
         return .init(degrees: self.location.coordinate.latitude)
     }
     ///Needed to know in which phase the moon is
-    public var ageOfTheMoonDegress: Double {
+    public var ageOfTheMoonDegrees: Double {
         return  12.1907 * ageOfTheMoonInDays
     }
     
     public var currentMoonPhase: MoonPhase {
-        return MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonDegress)
+        return MoonPhase.ageOfTheMoonDegrees2MoonPhase(ageOfTheMoonDegrees)
     }
     
     ///Number of days since the date selected in which there will be a full moon
